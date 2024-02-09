@@ -125,7 +125,7 @@ class Processor:
             .foreachBatch(self._write_jdbc)
             .start()
         )
-        query.awaitTxwermination()
+        query.awaitTermination()
 
     def run(self):
         df = self._read_stream()

@@ -68,11 +68,41 @@ services:
     container_name: processor
     networks:
       - cluster
+    ports:
+      - "4040:4040"
     depends_on:
       kafka:
         condition: service_healthy
       postgres:
         condition: service_started
+
+  prometheus:
+    image: prom/prometheus:v2.45.3
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    networks:
+      - cluster
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    networks:
+      - cluster
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
 
 volumes:
   kafka_data:
@@ -81,6 +111,7 @@ volumes:
   postgres_data:
     name: postgres_data
     driver: local
+  prom_data:
 
 networks:
   cluster:

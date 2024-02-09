@@ -28,4 +28,5 @@ docker exec -it -w /opt/bitnami/kafka/bin kafka kafka-console-consumer.sh --boot
 ./bin/pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0 --conf spark.driver.extraJavaOptions="-Divy.cache.dir=/tmp -Divy.home=/tmp"
 ```
 
+http://localhost:4040/metrics/executors/prometheus
 
